@@ -1,0 +1,11 @@
+{
+  "name": "croc-hunter",
+  "description": "Croc-hunter game",
+  "keywords": [
+    "croc-hunter",
+  ],
+  "image": "heroku/go:1.6",
+  "mount_dir": "src/github.com/lachie83/croc-hunter",
+  "website": "http://github.com/lachie83/croc-hunter",
+  "repository": "http://github.com/lachie83/croc-hunter"
+}
