@@ -37,11 +37,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+        port := os.Getenv("PORT")
+
+        if port == "" {
+                log.Fatal("$PORT must be set")
+        }
 	// log start to stdout
 	log.Println("Starting server...")
 	// point / at the handler fuction
 	http.HandleFunc("/", handler)
 	// serve static content from /static
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":" + port, nil)
 }
