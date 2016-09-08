@@ -2,19 +2,21 @@ default: docker_build
 
 DOCKER_IMAGE ?= lachlanevenson/croc-hunter
 DOCKER_TAG ?= `git rev-parse --abbrev-ref HEAD`
-CIRCLE_SHA1 ?= `git rev-parse --short HEAD`
+VCS_REF ?= `git rev-parse --short HEAD`
 
 .PHONY: docker_build
 docker_build:
 	@docker build \
-	  --build-arg VCS_REF=$(CIRCLE_SHA1) \
+	  --build-arg VCS_REF=$(VCS_REF) \
 	  --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 	  -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
 
 .PHONY: docker_push
 docker_push:
 	# Push to DockerHub
+	docker tag $(DOCKER_IMAGE):$(DOCKER_TAG) $(DOCKER_IMAGE):latest
 	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+	docker push $(DOCKER_IMAGE):latest
 
 # go option
 GO        ?= go
