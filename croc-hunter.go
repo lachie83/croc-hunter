@@ -1,52 +1,48 @@
+// The infamous "croc-hunter" game as featured at many a demo
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
 	"net/http"
 	"os"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	// grab hostname
-	hostname, _ := os.Hostname()
-	// construction html
-	fmt.Fprintf(w, `<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tokyo Summit Croc Hunter</title>
-        <link rel='stylesheet' href='/static/game.css'/>
-    </head>
-    <body>
-
-    	<canvas id="canvasBg" width="800" height="490" ></canvas>
-    	<canvas id="canvasEnemy" width="800" height="500" ></canvas>
-    	<canvas id="canvasJet" width="800" height="500" ></canvas>
-        <canvas id="canvasHud" width="800" height="500" ></canvas>
-        <script src='/static/game2.js'></script>
-        <div class="details">
-				<strong>Version:</strong> 2.0<br>
-				<strong>Hostname:</strong> %v<br>
-
-        </div>
-    </body>
-</html>`, hostname)
-
-	// log page hit to stdout
-	log.Println("served web page")
-}
+var (
+	httpListenAddr string
+	hostname string
+	release string
+	powered string
+)
 
 func main() {
-        port := os.Getenv("PORT")
+	flag.StringVar(&httpListenAddr, "port", "8080", "HTTP Listen address.")
 
-        if port == "" {
-                log.Fatal("$PORT must be set")
-        }
-	// log start to stdout
+	flag.Parse()
+
 	log.Println("Starting server...")
-	// point / at the handler fuction
-	http.HandleFunc("/", handler)
+
+	var err error
+	hostname, err = os.Hostname()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	release = os.Getenv("WORKFLOW_RELEASE")
+        if release == "" {
+                release = "unknown"
+        }
+        powered = os.Getenv("POWERED_BY")
+        if powered == "" {
+                powered = "Deis"
+        }
+
+	// point / at the handler function
+	http.HandleFunc("/", httpHandler)
+
 	// serve static content from /static
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
-	http.ListenAndServe(":" + port, nil)
+
+	log.Println("Server started. Listening on port " + httpListenAddr)
+	log.Fatal(http.ListenAndServe(":" + httpListenAddr, nil))
 }
