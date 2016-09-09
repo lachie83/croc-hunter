@@ -43,6 +43,6 @@ deployment:
     branch: master
     commands:
       - echo $DOCKER_PASS | base64 --decode > ${HOME}/docker_pass
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p "$(cat ${HOME}/docker_pass)"
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p "$(cat ${HOME}/docker_pass)" quay.io
       - make docker_build
       - make docker_push
