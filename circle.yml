@@ -15,7 +15,6 @@ dependencies:
   pre:
     - sudo rm -rf /usr/local/go
     - rm -rf "$GOPATH"
-    - env
 
   override:
     # install go and helm
