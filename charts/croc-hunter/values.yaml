@@ -9,7 +9,7 @@ ServicePort: 80
 ContainerPort: 8080
 Component: "croc-hunter"
 Replicas: 3
-Image: "lachlanevenson/croc-hunter"
+Image: "quay.io/lachie83/croc-hunter"
 ImageTag: "latest"
 ImagePullPolicy: "Always"
 Cpu: "10m"
