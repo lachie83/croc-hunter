@@ -6,6 +6,7 @@ machine:
     GOVERSION: "1.6.3"
     GOPATH:  "${HOME}/.go_workspace"
     WORKDIR: "${GOPATH}/src/github.com/lachie83/croc-hunter"
+    HELMVERSION: "v2.0.0-alpha.4"
 
   services:
     - docker
@@ -14,11 +15,14 @@ dependencies:
   pre:
     - sudo rm -rf /usr/local/go
     - rm -rf "$GOPATH"
+    - env
 
   override:
-    # install go
+    # install go and helm
     - wget "https://storage.googleapis.com/golang/go${GOVERSION}.linux-amd64.tar.gz"
     - sudo tar -C /usr/local -xzf "go${GOVERSION}.linux-amd64.tar.gz"
+    - wget "https://github.com/kubernetes/helm/releases/download/${HELMVERSION}/helm-${HELMVERSION}-linux-amd64.tar.gz"
+    - sudo tar -C ${HOME} -xzf "helm-${HELMVERSION}-linux-amd64.tar.gz"
 
     # move repository to the canonical import path
     - mkdir -p "$(dirname ${WORKDIR})"
@@ -29,6 +33,11 @@ dependencies:
 
   post:
     - go env
+
+test:
+  # Helm lint the chart
+  post:
+    - ${HOME}/linux-amd64/helm lint "${HOME}/croc-hunter/charts/croc-hunter"
 
 deployment:
   hub:

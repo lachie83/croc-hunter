@@ -1,0 +1,9 @@
+name: croc-hunter
+home: https://github.com/lachie83/croc-hunter
+version: 0.2.0
+description: croc-hunter chart for Kubernetes.
+sources:
+  - https://github.com/lachie83/croc-hunter
+maintainers:
+  - name: Lachlan Evenson
+    email: lachlan@gmail.com
