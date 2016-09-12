@@ -7,6 +7,7 @@ machine:
     GOPATH:  "${HOME}/.go_workspace"
     WORKDIR: "${GOPATH}/src/github.com/lachie83/croc-hunter"
     HELMVERSION: "v2.0.0-alpha.4"
+    VCS_REF: $(echo $CIRCLE_SHA1 | cut -c -7)
 
   services:
     - docker
