@@ -54,3 +54,6 @@ spec:
             requests:
               cpu: "{{.Values.Cpu}}"
               memory: "{{.Values.Memory}}"
+          env:
+          - name: WORKFLOW_RELEASE
+            value: {{.Release.Name | quote }}
