@@ -1,4 +1,4 @@
-node('default') {
+node {
 
     stage 'preparation'
 
