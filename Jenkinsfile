@@ -1,7 +1,7 @@
 node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter"
-  def pwd = "/home/jenkins/workspace/croc-hunter/dev"
+  def pwd = "/home/jenkins/workspace/croc-hunter/dev/"
 
   stage ('preparation') {
 
@@ -9,7 +9,7 @@ node {
 
   sh "mkdir -p ${workDir}"
   sh "ls -l ${pwd}"
-  sh "cp -R ${pwd}/croc-hunter ${workDir}"
+  sh "cp -R ${pwd} ${workDir}"
 
   }
 
