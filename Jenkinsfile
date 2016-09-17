@@ -9,7 +9,7 @@ node {
   checkout scm
 
   sh "mkdir -p ${workDir}"
-  sh "cp -R ${HOME}/croc-hunter ${workDir}"
+  sh "cp -R ${home}/croc-hunter ${workDir}"
 
   }
 
@@ -17,7 +17,7 @@ node {
 
   sh "cd ${workDir} && make bootstrap build"
   sh "go env"
-  
+
   }
 
   stage ('lint') {
