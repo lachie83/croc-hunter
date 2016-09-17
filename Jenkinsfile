@@ -37,7 +37,7 @@ node {
       sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p `cat ${pwd}/docker_pass` quay.io"
       sh "cd ${pwd}"
       sh "make docker_build"
-      sh "make docker_publish"
+      sh "make docker_push"
 
       }
   }
