@@ -1,7 +1,7 @@
 node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter"
-  def home = env.BUILD_TAG
+  def home = env.HOME
 
 
   stage ('preparation') {
