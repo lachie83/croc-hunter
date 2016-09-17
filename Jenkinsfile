@@ -7,14 +7,14 @@ node {
 
   checkout scm
 
-  mkdir -p "$(dirname ${WORKDIR})"
-  cp -R "${HOME}/croc-hunter" "${WORKDIR}"
+  mkdir -p "$(dirname ${workDir})"
+  cp -R "${HOME}/croc-hunter" "${workDir}"
 
   }
 
   stage ('compile') {
 
-  cd "${WORKDIR}" && make bootstrap build
+  cd "${workDir}" && make bootstrap build
   go env
   }
 
