@@ -9,14 +9,14 @@ node {
 
   sh "mkdir -p ${workDir}"
   sh "ls -l ${pwd}"
-  sh "cp -R ${pwd}/* ${workDir}"
+  sh "cp -R ${pwd} ${workDir}"
 
   }
 
   stage ('compile') {
 
   sh "ls -l ${workDir}"
-  sh "cd ${workDir} && pwd && make bootstrap build"
+  sh "cd ${workDir} && make bootstrap build"
   sh "go env"
 
   }
