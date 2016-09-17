@@ -14,7 +14,7 @@ node {
 
   stage ('compile') {
 
-  sh "cd ${workDir}
+  sh "cd ${workDir}"
   sh "make bootstrap build"
   sh "go test -v -race ./..."
 
