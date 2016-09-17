@@ -8,22 +8,21 @@ node {
   checkout scm
 
   sh "mkdir -p ${workDir}"
-  sh "ls -l ${pwd}"
   sh "cp -R ${pwd}/* ${workDir}"
 
   }
 
   stage ('compile') {
 
-  sh "cd ${workDir} && make bootstrap build"
-  sh "ls -l"
-  sh "cd ${workDir} && go test -v -race ./..."
+  sh "cd ${workDir}
+  sh "make bootstrap build"
+  sh "go test -v -race ./..."
 
   }
 
   stage ('lint') {
 
-  sh "/usr/local/linux-amd64/helm lint ${pwd}/croc-hunter/charts/croc-hunter"
+  sh "/usr/local/linux-amd64/helm lint ${pwd}/charts/croc-hunter"
 
   }
 
