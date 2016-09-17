@@ -9,7 +9,7 @@ node {
 
   sh "mkdir -p ${workDir}"
   sh "ls -l ${pwd}"
-  sh "cp -R ${pwd} ${workDir}"
+  sh "cp -R ${pwd}* ${workDir}"
 
   }
 
