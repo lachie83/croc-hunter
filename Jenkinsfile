@@ -1,14 +1,15 @@
 node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter"
-  def workSpace = "/home/jenkins/workspace"
+  def pwd = env.PWD
 
   stage ('preparation') {
 
   checkout scm
 
   sh "mkdir -p ${workDir}"
-  sh "cp -R ${workSpace}/croc-hunter ${workDir}"
+  sh "ls -l ${pwd}"
+  sh "cp -R ${pwd}/croc-hunter ${workDir}"
 
   }
 
@@ -21,7 +22,7 @@ node {
 
   stage ('lint') {
 
-  sh "/usr/local/linux-amd64/helm lint ${workSpace}/croc-hunter/charts/croc-hunter"
+  sh "/usr/local/linux-amd64/helm lint ${pwd}/croc-hunter/charts/croc-hunter"
 
   }
 
