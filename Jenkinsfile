@@ -7,7 +7,7 @@ node {
 
   checkout scm
 
-  sh "mkdir -p $(dirname ${workDir})"
+  sh "mkdir -p ${workDir}"
   sh "cp -R ${HOME}/croc-hunter ${workDir}"
 
   }
