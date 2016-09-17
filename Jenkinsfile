@@ -15,7 +15,7 @@ node {
 
   stage ('compile') {
 
-  sh "make -f ${workDir}/Makefile bootstrap build"
+  sh "cd ${workDir} && make bootstrap build"
   sh "go env"
 
   }
