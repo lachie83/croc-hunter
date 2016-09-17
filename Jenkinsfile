@@ -33,7 +33,7 @@ node {
                       usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 
       sh "echo ${env.PASSWORD} | base64 --decode > ${pwd}/docker_pass"
-      sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p $(cat ${pwd}/docker_pass) quay.io"
+      sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p `cat ${pwd}/docker_pass` quay.io"
       sh "cd ${pwd}"
       sh "make docker_build"
       sh "make docker_publish"
