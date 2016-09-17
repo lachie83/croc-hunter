@@ -7,20 +7,20 @@ node {
 
   checkout scm
 
-  mkdir -p "$(dirname ${workDir})"
-  cp -R "${HOME}/croc-hunter" "${workDir}"
+  sh "mkdir -p $(dirname ${workDir})"
+  sh "cp -R ${HOME}/croc-hunter ${workDir}"
 
   }
 
   stage ('compile') {
 
-  cd "${workDir}" && make bootstrap build
-  go env
+  sh "cd ${workDir} && make bootstrap build"
+  sh "go env"
   }
 
   stage ('lint') {
 
-  $/usr/local/linux-amd64/helm lint "${HOME}/croc-hunter/charts/croc-hunter"
+  sh "/usr/local/linux-amd64/helm lint ${HOME}/croc-hunter/charts/croc-hunter"
 
   }
 
