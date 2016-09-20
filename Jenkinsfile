@@ -12,6 +12,11 @@ node {
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
 
+  // read in required jenkins workflow config values
+  def inputFile = readFile('Jenkinsfile.json')
+  def config = new groovy.json.JsonSlurper().parseText(inputFile)
+  println "workflow config ==> ${config}"
+
   }
 
   stage ('compile') {
