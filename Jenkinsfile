@@ -49,10 +49,10 @@ node {
 
   stage ('deploy')
 
-  def name = croc-hunter
-  def replicas = 1
-  def cpu = 10m
-  def memory = 128Mi
+  def name = "croc-hunter"
+  def replicas = "1"
+  def cpu = "10m"
+  def memory = "128Mi"
 
   // start kubectl proxy to enabled kube API access
 
