@@ -4,6 +4,7 @@ node {
   def pwd = "/home/jenkins/workspace/croc-hunter/dev"
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
+  def docker_tag = `git rev-parse --short HEAD`
 
   stage ('preparation') {
 
@@ -51,4 +52,6 @@ node {
   sh "/usr/local/linux-amd64/helm init"
 
   sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name croc-hunter --namespace=croc-hunter"
+
+  sh "helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=docker_tag"
 }
