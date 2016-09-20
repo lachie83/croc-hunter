@@ -5,17 +5,17 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
+  // read in required jenkins workflow config values
+  def inputFile = readFile('Jenkinsfile.json')
+  def config = new groovy.json.JsonSlurper().parseText(inputFile)
+  println "workflow config ==> ${config}"
+
   stage ('preparation') {
 
   checkout scm
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
-
-  // read in required jenkins workflow config values
-  def inputFile = readFile('Jenkinsfile.json')
-  def config = new groovy.json.JsonSlurper().parseText(inputFile)
-  println "workflow config ==> ${config}"
 
   }
 
