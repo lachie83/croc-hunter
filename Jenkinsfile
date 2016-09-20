@@ -5,11 +5,6 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  // read in required jenkins workflow config values
-  def inputFile = readFile('Jenkinsfile.json')
-  def config = new groovy.json.JsonSlurper().parseText(inputFile)
-  println "workflow config ==> ${config}"
-
   stage ('preparation') {
 
   checkout scm
@@ -48,6 +43,12 @@ node {
   }
 
   stage ('deploy')
+
+  // read in required jenkins workflow config values
+  def inputFile = readFile('Jenkinsfile.json')
+  def config = new groovy.json.JsonSlurper().parseText(inputFile)
+  println "workflow config ==> ${config}"
+
   // start kubectl proxy to enabled kube API access
 
   sh "kubectl proxy &"
