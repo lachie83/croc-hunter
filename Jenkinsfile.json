@@ -1,0 +1,8 @@
+{
+  "app": {
+    "name": "croc-hunter",
+    "replicas": "1",
+    "cpu": "10m",
+    "memory": "128Mi",
+  }
+}
