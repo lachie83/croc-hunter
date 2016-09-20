@@ -12,6 +12,11 @@ node {
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
 
+  // read in required jenkins workflow config values
+  def inputFile = readFile('Jenkinsfile.json')
+  def config = new groovy.json.JsonSlurper().parseText(inputFile)
+  println "workflow config ==> ${config}"
+
   }
 
   stage ('compile') {
@@ -44,15 +49,10 @@ node {
 
   stage ('deploy')
 
-  // read in required jenkins workflow config values
-  def inputFile = readFile('Jenkinsfile.json')
-  def config = new groovy.json.JsonSlurper().parseText(inputFile)
-  println "workflow config ==> ${config}"
-
-  def name = config.app.name
-  def replicas = config.app.replicas
-  def cpu = config.app.cpu
-  def memory = config.app.memory
+  def name = croc-hunter
+  def replicas = 1
+  def cpu = 10m
+  def memory = 128Mi
 
   // start kubectl proxy to enabled kube API access
 
