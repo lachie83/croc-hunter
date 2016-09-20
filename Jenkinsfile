@@ -4,7 +4,6 @@ node {
   def pwd = "/home/jenkins/workspace/croc-hunter/dev"
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
-  def docker_tag = git rev-parse --short HEAD
 
   stage ('preparation') {
 
