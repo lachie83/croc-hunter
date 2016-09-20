@@ -49,6 +49,11 @@ node {
   def config = new groovy.json.JsonSlurper().parseText(inputFile)
   println "workflow config ==> ${config}"
 
+  def name = config.app.name
+  def replicas = config.app.replicas
+  def cpu = config.app.cpu
+  def memory = config.app.memory
+
   // start kubectl proxy to enabled kube API access
 
   sh "kubectl proxy &"
@@ -56,7 +61,7 @@ node {
 
   sh "/usr/local/linux-amd64/helm init"
 
-  sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${config.app.name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory} --namespace=${config.app.name}"
+  sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${replicas},Cpu=${cpu},Memory=${memory} --namespace=${config.app.name}"
 
-  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory}"
+  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${replicas},Cpu=${cpu},Memory=${memory}"
 }
