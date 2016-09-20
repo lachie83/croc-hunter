@@ -46,5 +46,5 @@ node {
   // start kubectl proxy to enabled kube API access
 
   sh "kubectl proxy > /dev/null 2>&1 &"
-  sh "kubectl --server="http://localhost:8001" get nodes"
+  sh "kubectl --server=http://localhost:8001 get nodes"
 }
