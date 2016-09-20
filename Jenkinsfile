@@ -47,7 +47,7 @@ node {
       }
   }
 
-  stage ('deploy')
+  stage ('deploy') {
 
   def name = "croc-hunter"
   def replicas = "1"
@@ -64,4 +64,5 @@ node {
   sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${replicas},Cpu=${cpu},Memory=${memory} --namespace=${name}"
 
   sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${replicas},Cpu=${cpu},Memory=${memory}"
+  }
 }
