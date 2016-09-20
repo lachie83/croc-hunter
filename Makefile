@@ -1,7 +1,7 @@
 default: docker_build
 
 DOCKER_IMAGE ?= quay.io/lachie83/croc-hunter
-DOCKER_TAG ?= `git rev-parse --abbrev-ref HEAD`
+DOCKER_TAG ?= `git rev-parse --short HEAD`
 VCS_REF ?= `git rev-parse --short HEAD`
 
 .PHONY: docker_build
