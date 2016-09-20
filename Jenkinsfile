@@ -52,5 +52,5 @@ node {
 
   sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name croc-hunter --namespace=croc-hunter"
 
-  sh "helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=env.BUILD_NUMBER"
+  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=env.BUILD_NUMBER"
 }
