@@ -55,7 +55,7 @@ node {
 
   sh "/usr/local/linux-amd64/helm init"
 
-  sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name config.app.name --set ImageTag=${env.BUILD_NUMBER},Replicas=config.app.replicas,Cpu=config.app.cpu,Memory=config.app.memory --namespace=config.app.name"
+  sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${config.app.name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory} --namespace=${config.app.name}"
 
-  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=config.app.replicas,Cpu=config.app.cpu,Memory=config.app.memory"
+  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory}"
 }
