@@ -42,4 +42,9 @@ node {
       }
   }
 
+  stage ('deploy')
+  // start kubectl proxy to enabled kube API access
+
+  kubectl proxy > /dev/null 2>&1 &
+  kubectl --server="http://localhost:8001" get nodes
 }
