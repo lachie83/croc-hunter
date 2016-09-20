@@ -48,7 +48,7 @@ node {
   sh "kubectl proxy &"
   sh "kubectl --server=http://localhost:8001 get nodes"
 
-  sh "helm init"
+  sh "/usr/local/linux-amd64/helm init"
 
   sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name croc-hunter --namespace=croc-hunter"
 }
