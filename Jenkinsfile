@@ -59,9 +59,6 @@ node {
       sh "make docker_build"
       sh "make docker_push"
       }
-      def quay = load 'lib/jenkins-pipeline/quay.groovy'
-      quay.quay_login(quay_creds_id)
-
   }
 
   stage ('deploy') {
