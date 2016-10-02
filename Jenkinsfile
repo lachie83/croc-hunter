@@ -56,8 +56,7 @@ node {
       sh "cd ${pwd}"
       sh "make docker_build"
       sh "make docker_push"
-
-      }
+      
   }
 
   stage ('deploy') {
@@ -67,7 +66,7 @@ node {
   //def cpu = "10m"
   //def memory = "128Mi"
 
-  // start kubectl proxy to enabled kube API access
+  // start kubectl proxy to enable kube API access
 
   sh "kubectl proxy &"
   sh "kubectl --server=http://localhost:8001 get nodes"
@@ -77,5 +76,6 @@ node {
   sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name config.app.name --set ImageTag=${env.BUILD_NUMBER},Replicas=config.app.replicas,Cpu=config.app.cpu,Memory=config.app.memory --namespace=config.app.name"
 
   sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=config.app.replicas,Cpu=config.app.cpu,Memory=config.app.memory"
+  
   }
 }
