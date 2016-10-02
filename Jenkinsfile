@@ -52,7 +52,7 @@ node {
 
   stage ('publish') {
 
-      quay.quay_login(quay_creds_id)
+      quay.login(quay_creds_id)
       sh "cd ${pwd}"
       sh "make docker_build"
       sh "make docker_push"
