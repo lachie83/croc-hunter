@@ -55,11 +55,12 @@ node {
     sh "echo ${env.PASSWORD} | base64 --decode > ${pwd}/docker_pass"
     sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p `cat ${pwd}/docker_pass` quay.io"
       
-      quay.quay_login(quay_creds_id)
       sh "cd ${pwd}"
       sh "make docker_build"
       sh "make docker_push"
       }
+      def quay = load 'lib/jenkins-pipeline/quay.groovy'
+      quay.quay_login(quay_creds_id)
 
   }
 
