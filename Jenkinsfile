@@ -9,6 +9,8 @@ node {
 
   checkout scm
 
+  sh "env"
+
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
 
