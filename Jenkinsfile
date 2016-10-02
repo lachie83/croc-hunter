@@ -1,7 +1,7 @@
 node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
-  def pwd = "/home/jenkins/workspace/croc-hunter/dev"
+  def pwd = pwd()
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
