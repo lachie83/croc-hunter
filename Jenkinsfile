@@ -9,7 +9,7 @@ node {
 
   checkout scm
 
-  sh "env"
+  sh "env | sort"
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
@@ -17,7 +17,22 @@ node {
   // read in required jenkins workflow config values
   def inputFile = readFile('Jenkinsfile.json')
   def config = new groovy.json.JsonSlurper().parseText(inputFile)
-  println "workflow config ==> ${config}"
+  println "pipeline config ==> ${config}"
+
+  // continue only if pipeline enabled
+  if (!config.pipeline.enabled) {
+      println "pipeline disabled"
+      return
+  }
+
+  // load pipeline library
+  dir('lib/jenkins-pipeline') {
+      git branch: config.pipeline.library.branch,
+              url: 'https://github.com/lachie83/jenkins-pipeline.git'
+  }
+
+  // load quay library module
+  def quay = load 'lib/jenkins-pipeline/quay.groovy'
 
   }
 
