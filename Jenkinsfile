@@ -28,7 +28,7 @@ node {
               url: 'https://github.com/lachie83/jenkins-pipeline.git'
   }
 
-  def pipeline = load 'lib/jenkins-workflow/pipeline.groovy'
+  def pipeline = load 'lib/jenkins-pipeline/pipeline.groovy'
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
