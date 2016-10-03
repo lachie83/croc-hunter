@@ -65,12 +65,11 @@ node {
 
   // start kubectl proxy to enable kube API access
 
-
-  def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
-
-  pipeline.kubectl_proxy()
- // sh "kubectl proxy &"
- // sh "kubectl --server=http://localhost:8001 get nodes"
+ // def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
+ // pipeline.kubectlProxy()
+ 
+  sh "kubectl proxy &"
+  sh "kubectl --server=http://localhost:8001 get nodes"
 
 
   sh "/usr/local/linux-amd64/helm init"
