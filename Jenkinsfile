@@ -65,8 +65,9 @@ node {
 
   // start kubectl proxy to enable kube API access
 
- // def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
- // pipeline.kubectlProxy()
+  // TOOD: Load in pipeline functions to handle this
+  // def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
+  // pipeline.kubectlProxy()
 
   sh "kubectl proxy &"
   sh "kubectl --server=http://localhost:8001 get nodes"
@@ -74,9 +75,9 @@ node {
 
   sh "/usr/local/linux-amd64/helm init"
 
-  sh "/usr/local/linux-amd64/helm status croc-hunter || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${config.app.name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app}.replicas,Cpu=${config.app.cpu},Memory=${config.app.memory} --namespace=${config.app.name}"
+  sh "/usr/local/linux-amd64/helm status ${config.app.name} || /usr/local/linux-amd64/helm install ${pwd}/charts/croc-hunter --name ${config.app.name} --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app}.replicas,Cpu=${config.app.cpu},Memory=${config.app.memory} --namespace=${config.app.name}"
 
-  sh "/usr/local/linux-amd64/helm upgrade croc-hunter ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory}"
+  sh "/usr/local/linux-amd64/helm upgrade ${config.app.name} ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory}"
   
   }
 }
