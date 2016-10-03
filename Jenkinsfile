@@ -67,10 +67,8 @@ node {
 
   // start kubectl proxy to enable kube API access
 
-  pipeline.kubectl_proxy()
- // sh "kubectl proxy &"
- // sh "kubectl --server=http://localhost:8001 get nodes"
-
+ sh "kubectl proxy &"
+ sh "kubectl --server=http://localhost:8001 get nodes"
 
   sh "/usr/local/linux-amd64/helm init"
 
