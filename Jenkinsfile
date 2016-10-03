@@ -5,10 +5,6 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  stage ('preparation') {
-
-  sh "env | sort"
-
   checkout scm
 
   // read in required jenkins workflow config values
@@ -29,6 +25,10 @@ node {
   }
 
   def pipeline = load 'lib/jenkins-pipeline/pipeline.groovy'
+
+  stage ('preparation') {
+
+  sh "env | sort"
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
