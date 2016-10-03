@@ -5,6 +5,10 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
+  stage ('preparation') {
+
+  sh "env | sort"
+
   checkout scm
 
   // read in required jenkins workflow config values
@@ -24,9 +28,7 @@ node {
               url: 'https://github.com/lachie83/jenkins-pipeline.git'
   }
 
-  stage ('preparation') {
-
-  sh "env | sort"
+  def pipeline = load 'lib/jenkins-workflow/pipeline.groovy'
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
@@ -63,15 +65,12 @@ node {
 
   stage ('deploy') {
 
-  //def name = "croc-hunter"
-  //def replicas = "1"
-  //def cpu = "10m"
-  //def memory = "128Mi"
-
   // start kubectl proxy to enable kube API access
 
-  sh "kubectl proxy &"
-  sh "kubectl --server=http://localhost:8001 get nodes"
+  pipeline.kubectl_proxy()
+ // sh "kubectl proxy &"
+ // sh "kubectl --server=http://localhost:8001 get nodes"
+
 
   sh "/usr/local/linux-amd64/helm init"
 
