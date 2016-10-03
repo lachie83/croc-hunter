@@ -5,10 +5,6 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  stage ('preparation') {
-
-  sh "env | sort"
-
   checkout scm
 
   // read in required jenkins workflow config values
@@ -27,6 +23,10 @@ node {
       git branch: config.pipeline.library.branch,
               url: 'https://github.com/lachie83/jenkins-pipeline.git'
   }
+
+  stage ('preparation') {
+
+  sh "env | sort"
 
   sh "mkdir -p ${workDir}"
   sh "cp -R ${pwd}/* ${workDir}"
@@ -67,7 +67,7 @@ node {
 
  // def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
  // pipeline.kubectlProxy()
- 
+
   sh "kubectl proxy &"
   sh "kubectl --server=http://localhost:8001 get nodes"
 
