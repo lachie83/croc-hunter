@@ -2,6 +2,7 @@ node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
   def pwd = pwd()
+  def chart_dir = "${pwd}/charts/croc-hunter"
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
@@ -18,65 +19,77 @@ node {
       return
   }
 
-  // load pipeline library
-  dir('lib/jenkins-pipeline') {
-      git branch: config.pipeline.library.branch,
-              url: 'https://github.com/lachie83/jenkins-pipeline.git'
-  }
+  // load pipeline class
+  def pipeline = new io.estrado.Pipeline()
+
+  // set additional git envvars for image tagging
+  pipeline.gitEnvVars()
+
+  // tag image with version, and branch-commit_id
+  def acct = pipeline.getContainerRepoAcct(config)
+  def image_tags_map = pipeline.getContainerTags(config)
+  def image_tags_list = pipeline.getMapValues(image_tags_map)
 
   stage ('preparation') {
 
-  sh "env | sort"
+    sh "env | sort"
 
-  sh "mkdir -p ${workDir}"
-  sh "cp -R ${pwd}/* ${workDir}"
+    sh "mkdir -p ${workDir}"
+    sh "cp -R ${pwd}/* ${workDir}"
 
   }
 
   stage ('compile') {
 
-  sh "cd ${workDir}"
-  sh "make bootstrap build"
-  sh "go test -v -race ./..."
+    sh "cd ${workDir}"
+    sh "make bootstrap build"
+    sh "go test -v -race ./..."
 
   }
 
   stage ('lint') {
 
-  sh "/usr/local/linux-amd64/helm lint ${pwd}/charts/croc-hunter"
+    pipeline.helmLint(chart_dir)
 
   }
 
   stage ('publish') {
 
+    // perform docker login to quay as the docker-pipeline-plugin doesn't work with the next auth json format
     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: quay_creds_id,
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+      sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
+    }
 
-    sh "echo ${env.PASSWORD} | base64 --decode > ${pwd}/docker_pass"
-    sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p `cat ${pwd}/docker_pass` quay.io"
-      
-      sh "cd ${pwd}"
-      sh "make docker_build"
-      sh "make docker_push"
-      }
+    // build and publish container
+    pipeline.containerBuildPub(
+        dockerfile: config.container_repo.dockerfile,
+        host      : config.container_repo.host,
+        acct      : acct,
+        repo      : config.container_repo.repo,
+        tags      : image_tags_list,
+        auth_id   : config.container_repo.jenkins_creds_id
+    )
+
   }
 
-  stage ('deploy') {
+  // deploy only the master branch
+  if (env.BRANCH_NAME == 'master') {
+    stage ('deploy') {
 
-  // start kubectl proxy to enable kube API access
+      // start kubectl proxy to enable kube API access
+      pipeline.kubectlProxy()
 
-  // TOOD: Load in pipeline functions to handle this
-  // def pipeline = load("lib/jenkins-pipeline/pipeline.groovy")
-  // pipeline.kubectlProxy()
+      // Deploy using Helm chart
+      pipeline.helmDeploy(
+        name          : config.app.name,
+        build_number  : image_tags_list.get(0),
+        chart_dir     : chart_dir,
+        replicas      : config.app.replicas,
+        cpu           : config.app.cpu,
+        memory        : config.app.memory
+      )
 
-  sh "kubectl proxy &"
-  // wait for kubectl proxy to complete setup
-  sh "sleep 5"
-  sh "kubectl --server=http://localhost:8001 get nodes"
-
-  sh "/usr/local/linux-amd64/helm init"
-
-  sh "/usr/local/linux-amd64/helm upgrade --install ${config.app.name} ${pwd}/charts/croc-hunter --set ImageTag=${env.BUILD_NUMBER},Replicas=${config.app.replicas},Cpu=${config.app.cpu},Memory=${config.app.memory} --namespace=${config.app.name}"
-  
+    }
   }
 }
