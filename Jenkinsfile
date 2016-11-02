@@ -43,12 +43,15 @@ node {
 
     sh "cd ${workDir}"
     sh "make bootstrap build"
-    sh "go test -v -race ./..."
 
   }
 
-  stage ('lint') {
+  stage ('test') {
 
+    // run go tests
+    sh "go test -v -race ./..."
+    
+    // run helm chart linter
     pipeline.helmLint(chart_dir)
 
   }
@@ -83,7 +86,7 @@ node {
       // Deploy using Helm chart
       pipeline.helmDeploy(
         name          : config.app.name,
-        build_number  : image_tags_list.get(0),
+        version_tag  : image_tags_list.get(0),
         chart_dir     : chart_dir,
         replicas      : config.app.replicas,
         cpu           : config.app.cpu,
