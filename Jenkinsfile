@@ -19,6 +19,15 @@ node {
       return
   }
 
+  // pipeline library checkout
+  dir('lib/jenkins-pipeline') {
+      git branch: config.pipeline.library.branch,
+              url: 'ssh://git@github.com:lachie83/jenkins-pipeline.git',
+  }
+
+  // load pipeline library modules
+  load 'lib/jenkins-pipeline/src/io/estrado/Pipeline.groovy'
+
   // load pipeline class
   def pipeline = new io.estrado.Pipeline()
 
@@ -50,7 +59,7 @@ node {
 
     // run go tests
     sh "go test -v -race ./..."
-    
+
     // run helm chart linter
     pipeline.helmLint(chart_dir)
 
