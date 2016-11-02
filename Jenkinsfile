@@ -26,7 +26,9 @@ node {
   }
 
   // load pipeline library modules
-  load 'lib/jenkins-pipeline/src/io/estrado/Pipeline.groovy'
+  def pipeline_lib = load 'lib/jenkins-pipeline/src/io/estrado/Pipeline.groovy'
+
+  @Library('pipeline_lib')
 
   // load pipeline class
   def pipeline = new io.estrado.Pipeline()
