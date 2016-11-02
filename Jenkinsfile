@@ -28,10 +28,8 @@ node {
   // load pipeline library modules
   load 'lib/jenkins-pipeline/src/io/estrado/Pipeline.groovy'
 
-  @Library('Pipeline')
-
   // load pipeline class
-  def pipeline = new io.estrado.Pipeline()
+  //def pipeline = new io.estrado.Pipeline()
 
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
