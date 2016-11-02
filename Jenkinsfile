@@ -19,17 +19,8 @@ node {
       return
   }
 
-  // pipeline library checkout
-  dir('lib/jenkins-pipeline') {
-      git branch: config.pipeline.library.branch,
-              url: 'https://github.com/lachie83/jenkins-pipeline.git'
-  }
-
-  // load pipeline library modules
-  def pipeline = load 'lib/jenkins-pipeline/src/io/estrado/Pipeline.groovy'
-
   // load pipeline class
-  //def pipeline = new io.estrado.Pipeline()
+  def pipeline = new io.estrado.Pipeline()
 
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
