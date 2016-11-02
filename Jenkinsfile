@@ -22,7 +22,7 @@ node {
   // pipeline library checkout
   dir('lib/jenkins-pipeline') {
       git branch: config.pipeline.library.branch,
-              url: 'ssh://git@github.com:lachie83/jenkins-pipeline.git',
+              url: 'ssh://git@github.com:lachie83/jenkins-pipeline.git'
   }
 
   // load pipeline library modules
