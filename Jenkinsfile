@@ -50,7 +50,7 @@ node {
 
     // run go tests
     sh "go test -v -race ./..."
-    
+
     // run helm chart linter
     pipeline.helmLint(chart_dir)
 
