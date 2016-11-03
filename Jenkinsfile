@@ -25,9 +25,12 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
-  // tag image with version, and branch-commit_id
   def acct = pipeline.getContainerRepoAcct(config)
+
+  // tag image with version, and branch-commit_id  
   def image_tags_map = pipeline.getContainerTags(config)
+  
+  // compile tag list
   def image_tags_list = pipeline.getMapValues(image_tags_map)
 
   stage ('preparation') {
