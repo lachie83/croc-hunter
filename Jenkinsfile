@@ -25,12 +25,13 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
-  env.HELM_TEST = true
+  // used to debug deployment setup
+  env.DEBUG_DEPLOY = false
   
   // debugging helm deployments
-  if (env.HELM_TEST == 'true') {
+  if (env.DEBUG_DEPLOY == 'true') {
     println "Runing helm tests"
-    pipeline.kubectlConfig()
+    pipeline.kubectlTest()
     pipeline.helmConfig()
   }  
 
@@ -92,9 +93,6 @@ node {
   // deploy only the master branch
   if (env.BRANCH_NAME == 'master') {
     stage ('deploy') {
-
-      // start kubectl proxy to enable kube API access
-      pipeline.kubectlConfig()
 
       // Deploy using Helm chart
       pipeline.helmDeploy(
