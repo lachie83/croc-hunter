@@ -25,6 +25,16 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
+  // used to debug deployment setup
+  env.DEBUG_DEPLOY = false
+  
+  // debugging helm deployments
+  if (env.DEBUG_DEPLOY == 'true') {
+    println "Runing helm tests"
+    pipeline.kubectlTest()
+    pipeline.helmConfig()
+  }  
+
   def acct = pipeline.getContainerRepoAcct(config)
 
   // tag image with version, and branch-commit_id  
@@ -83,9 +93,6 @@ node {
   // deploy only the master branch
   if (env.BRANCH_NAME == 'master') {
     stage ('deploy') {
-
-      // start kubectl proxy to enable kube API access
-      pipeline.kubectlProxy()
 
       // Deploy using Helm chart
       pipeline.helmDeploy(
