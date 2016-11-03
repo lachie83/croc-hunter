@@ -6,7 +6,7 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  def env.HELM_TEST = true
+  env.HELM_TEST = true
   
   // debugging helm deployments
   if (env.HELM_TEST == true) {
