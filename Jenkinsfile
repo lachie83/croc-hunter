@@ -12,6 +12,7 @@ node {
   if (env.HELM_TEST == true) {
     pipeline.kubectlProxy()
     pipeline.helmTest()
+  }
 
   checkout scm
 
