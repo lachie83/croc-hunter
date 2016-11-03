@@ -6,7 +6,7 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  checkout scm
+  // checkout scm
 
   // read in required jenkins workflow config values
   def inputFile = readFile('Jenkinsfile.json')
