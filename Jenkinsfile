@@ -32,7 +32,8 @@ node {
 
   stage ('preparation') {
 
-    sh "env | sort"
+    // Print env -- debugging
+    //sh "env | sort"
 
     sh "mkdir -p ${workDir}"
     sh "cp -R ${pwd}/* ${workDir}"
