@@ -30,8 +30,8 @@ node {
   // debugging helm deployments
   if (env.HELM_TEST == 'true') {
     println "Runing helm tests"
-    pipeline.kubectlProxy()
-    pipeline.helmTest()
+    pipeline.kubectlConfig()
+    pipeline.helmConfig()
   }  
 
   def acct = pipeline.getContainerRepoAcct(config)
@@ -94,7 +94,7 @@ node {
     stage ('deploy') {
 
       // start kubectl proxy to enable kube API access
-      pipeline.kubectlProxy()
+      pipeline.kubectlConfig()
 
       // Deploy using Helm chart
       pipeline.helmDeploy(
