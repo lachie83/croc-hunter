@@ -25,6 +25,10 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
+  if (env.BRANCH_NAME.grep('PR')) {
+    println "This is a PR"
+  }
+
   // tag image with version, and branch-commit_id
   def acct = pipeline.getContainerRepoAcct(config)
   def image_tags_map = pipeline.getContainerTags(config)
