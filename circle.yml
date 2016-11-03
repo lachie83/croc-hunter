@@ -6,7 +6,7 @@ machine:
     GOVERSION: "1.6.3"
     GOPATH:  "${HOME}/.go_workspace"
     WORKDIR: "${GOPATH}/src/github.com/lachie83/croc-hunter"
-    HELMVERSION: "v2.0.0-alpha.4"
+    HELMVERSION: "v2.0.0-beta.2"
     VCS_REF: $(echo $CIRCLE_SHA1 | cut -c -7)
 
   services:
