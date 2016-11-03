@@ -27,14 +27,11 @@ node {
 
   def acct = pipeline.getContainerRepoAcct(config)
 
-  // tag image with version, and branch-commit_id
-  if (env.BRANCH_NAME.contains('PR')) {
-    def image_tags_map = pipeline.getContainerPRTags(config)
-    def image_tags_list = pipeline.getMapValues(image_tags_map)
-  } else {
-    def image_tags_map = pipeline.getContainerTags(config)
-    def image_tags_list = pipeline.getMapValues(image_tags_map)
-  } 
+  // tag image with version, and branch-commit_id  
+  def image_tags_map = pipeline.getContainerTags(config)
+  
+  // compile tag list
+  def image_tags_list = pipeline.getMapValues(image_tags_map)
 
   stage ('preparation') {
 
