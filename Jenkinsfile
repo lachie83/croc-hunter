@@ -6,6 +6,13 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
+  def env.HELM_TEST = true
+  
+  // debugging helm deployments
+  if (env.HELM_TEST == true) {
+    pipeline.kubectlProxy()
+    pipeline.helmTest()
+
   checkout scm
 
   // read in required jenkins workflow config values
