@@ -27,6 +27,8 @@ node {
 
   if (env.BRANCH_NAME.grep('PR')) {
     println "This is a PR"
+  } else {
+    println "This branch is NOT a PR"
   }
 
   // tag image with version, and branch-commit_id
