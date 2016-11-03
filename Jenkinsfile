@@ -9,7 +9,8 @@ node {
   env.HELM_TEST = true
   
   // debugging helm deployments
-  if (env.HELM_TEST == true) {
+  if (env.HELM_TEST == 'true') {
+    println "Runing helm tests"
     pipeline.kubectlProxy()
     pipeline.helmTest()
   }
