@@ -25,15 +25,17 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
-  if (env.BRANCH_NAME.contains('PR')) {
-    println "This is a PR"
-  } else {
-    println "This branch is NOT a PR"
-  }
+
+
+  def acct = pipeline.getContainerRepoAcct(config)
 
   // tag image with version, and branch-commit_id
-  def acct = pipeline.getContainerRepoAcct(config)
-  def image_tags_map = pipeline.getContainerTags(config)
+  if (env.BRANCH_NAME.contains('PR')) {
+    def image_tags_map = pipeline.getContainerPRTags(config)
+  } else {
+    def image_tags_map = pipeline.getContainerTags(config)
+  }
+  // compile tag list
   def image_tags_list = pipeline.getMapValues(image_tags_map)
 
   stage ('preparation') {
