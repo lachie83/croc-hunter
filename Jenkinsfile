@@ -6,15 +6,6 @@ node {
   def dockerEmail = "."
   def quay_creds_id = "quay_creds"
 
-  env.HELM_TEST = true
-  
-  // debugging helm deployments
-  if (env.HELM_TEST == 'true') {
-    println "Runing helm tests"
-    pipeline.kubectlProxy()
-    pipeline.helmTest()
-  }
-
   checkout scm
 
   // read in required jenkins workflow config values
@@ -33,6 +24,15 @@ node {
 
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
+
+  env.HELM_TEST = true
+  
+  // debugging helm deployments
+  if (env.HELM_TEST == 'true') {
+    println "Runing helm tests"
+    pipeline.kubectlProxy()
+    pipeline.helmTest()
+  }  
 
   def acct = pipeline.getContainerRepoAcct(config)
 
