@@ -25,7 +25,7 @@ node {
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
-  if (env.BRANCH_NAME.grep('PR')) {
+  if (env.BRANCH_NAME.contains('PR')) {
     println "This is a PR"
   } else {
     println "This branch is NOT a PR"
