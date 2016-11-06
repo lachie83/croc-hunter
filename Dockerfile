@@ -14,6 +14,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 COPY . /go/src/github.com/lachie83/croc-hunter
 COPY static/ static/
 
+ENV GIT_SHA $VCS_REF
 ENV GOPATH /go
 RUN cd $GOPATH/src/github.com/lachie83/croc-hunter && go install -v .
 

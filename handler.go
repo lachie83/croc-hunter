@@ -42,7 +42,8 @@ var html = `
         <script src='/static/game.js'></script>
         <div class="details">
 		<strong>Hostname:</strong> %s<br>
-		<strong>Version:</strong> %s<br>
+		<strong>Release:</strong> %s<br>
+		<strong>Commit:</strong> %s<br>
 		<strong>Powered By:</strong> %s<br>
         </div>
     </body>
@@ -50,5 +51,5 @@ var html = `
 `
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, html, hostname, release, powered)
+	fmt.Fprintf(w, html, hostname, release, commit, powered)
 }
