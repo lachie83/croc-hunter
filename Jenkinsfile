@@ -1,3 +1,8 @@
+#!/usr/bin/groovy
+
+@Library('github.com/lachie83/jenkins-pipeline@master')
+def pipeline = new io.estrado.Pipeline()
+
 node {
   def goPath = "/go"
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
@@ -19,27 +24,24 @@ node {
       return
   }
 
-  // load pipeline class
-  def pipeline = new io.estrado.Pipeline()
-
   // set additional git envvars for image tagging
   pipeline.gitEnvVars()
 
   // used to debug deployment setup
   env.DEBUG_DEPLOY = false
-  
+
   // debugging helm deployments
   if (env.DEBUG_DEPLOY == 'true') {
     println "Runing helm tests"
     pipeline.kubectlTest()
     pipeline.helmConfig()
-  }  
+  }
 
   def acct = pipeline.getContainerRepoAcct(config)
 
-  // tag image with version, and branch-commit_id  
+  // tag image with version, and branch-commit_id
   def image_tags_map = pipeline.getContainerTags(config)
-  
+
   // compile tag list
   def image_tags_list = pipeline.getMapValues(image_tags_map)
 
