@@ -4,7 +4,7 @@
 # name: value
 
 Name: croc-hunter
-ServiceType: LoadBalancer
+#ServiceType: ClusterIP
 ServicePort: 80
 ContainerPort: 8080
 Component: "croc-hunter"

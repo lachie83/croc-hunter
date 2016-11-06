@@ -15,7 +15,7 @@ spec:
       targetPort: {{.Values.ContainerPort}}
   selector:
     component: "{{.Release.Name}}-{{.Values.Component}}"
-  type: {{.Values.ServiceType}}
+  type: {{ default "ClusterIP" .Values.ServiceType | quote }}
 
 ---
 apiVersion: extensions/v1beta1
