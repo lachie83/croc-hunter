@@ -1,5 +1,6 @@
 #!/usr/bin/groovy
 
+// load pipeline functions
 @Library('github.com/lachie83/jenkins-pipeline@master')
 def pipeline = new io.estrado.Pipeline()
 
@@ -31,7 +32,7 @@ node {
   env.DEBUG_DEPLOY = false
 
   // debugging helm deployments
-  if (env.DEBUG_DEPLOY == 'true') {
+  if (env.DEBUG_DEPLOY) {
     println "Runing helm tests"
     pipeline.kubectlTest()
     pipeline.helmConfig()
@@ -70,6 +71,17 @@ node {
     // run helm chart linter
     pipeline.helmLint(chart_dir)
 
+    // run dry-run helm chart installation
+    pipeline.helmDeploy(
+      dry_run       : true,
+      name          : config.app.name,
+      version_tag   : image_tags_list.get(0),
+      chart_dir     : chart_dir,
+      replicas      : config.app.replicas,
+      cpu           : config.app.cpu,
+      memory        : config.app.memory
+    )
+
   }
 
   stage ('publish') {
@@ -98,8 +110,9 @@ node {
 
       // Deploy using Helm chart
       pipeline.helmDeploy(
+        dry_run       : false,
         name          : config.app.name,
-        version_tag  : image_tags_list.get(0),
+        version_tag   : image_tags_list.get(0),
         chart_dir     : chart_dir,
         replicas      : config.app.replicas,
         cpu           : config.app.cpu,
