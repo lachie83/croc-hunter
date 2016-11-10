@@ -9,11 +9,9 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
-  rules:
-  - host: {{ .Values.Ingress.domain }}
-    http:
-      paths:
-      - backend:
-          serviceName: {{ template "fullname" . }}
-          servicePort: {{ .Values.ServicePort }}
+  tls:
+  - secretName: {{ .Values.Ingress.domain }}
+  backend:
+    serviceName: {{ template "fullname" . }}
+    servicePort: {{ .Values.ServicePort }}
 {{- end }}
