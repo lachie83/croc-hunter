@@ -33,6 +33,8 @@ var html = `
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Croc Hunter</title>
         <link rel='stylesheet' href='/static/game.css'/>
+        <link rel="icon" type="image/png" href="/static/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/static/favicon-32x32.png" sizes="32x32" />
     </head>
     <body>
     	<canvas id="canvasBg" width="800" height="490" ></canvas>
