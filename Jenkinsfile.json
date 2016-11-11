@@ -11,6 +11,7 @@
     "alt_acct": "lachie83",
     "jenkins_creds_id": "quay_creds",
     "repo": "croc-hunter",
+    "dockeremail": ".",
     "dockerfile": "./"
   },
   "pipeline": {

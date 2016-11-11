@@ -9,8 +9,8 @@ node {
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
   def pwd = pwd()
   def chart_dir = "${pwd}/charts/croc-hunter"
-  def dockerEmail = "."
-  def quay_creds_id = "quay_creds"
+  // def dockerEmail = "."
+  // def quay_creds_id = "quay_creds"
 
   checkout scm
 
@@ -87,9 +87,9 @@ node {
   stage ('publish') {
 
     // perform docker login to quay as the docker-pipeline-plugin doesn't work with the next auth json format
-    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: quay_creds_id,
+    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: config.container_repo.jenkins_creds_id,
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-      sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
+      sh "docker login -e ${config.container_repo.dockeremail} -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
     }
 
     // build and publish container
