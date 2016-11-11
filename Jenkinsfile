@@ -9,8 +9,7 @@ node {
   def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
   def pwd = pwd()
   def chart_dir = "${pwd}/charts/croc-hunter"
-  // def dockerEmail = "."
-  // def quay_creds_id = "quay_creds"
+
 
   checkout scm
 
