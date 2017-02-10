@@ -15,5 +15,9 @@ Cpu: "10m"
 Memory: "128Mi"
 # Ingress settings
 Ingress:
-  enabled: true
+  enabled: false
   domain: croc-hunter2.k8s.estrado.io
+# PodDisruptionBudget
+Pdb:
+  enabled: false
+  minAvailable: 2
