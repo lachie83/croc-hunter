@@ -55,6 +55,11 @@ const (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
+	if r.URL.Path == "/healthz" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatalf("could not get hostname: %s", err)
