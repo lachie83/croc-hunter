@@ -1,77 +1,78 @@
-/*
-   Copyright (c) 2016 Lachlan Evenson
-
-   Permission is hereby granted, free of charge, to any person obtaining
-   a copy of this software and associated documentation files (the "Software"),
-   to deal in the Software without restriction, including without limitation
-   the rights to use, copy, modify, merge, publish, distribute, sublicense,
-   and/or sell copies of the Software, and to permit persons to whom the Software
-   is furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be included in
-   all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-   OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
 // The infamous "croc-hunter" game as featured at many a demo
 package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 )
 
-var (
-	httpListenAddr string
-	hostname       string
-	release        string
-	commit         string
-	powered        string
-)
-
 func main() {
-	flag.StringVar(&httpListenAddr, "port", "8080", "HTTP Listen address.")
+	httpListenAddr := flag.String("port", "8080", "HTTP Listen address.")
 
 	flag.Parse()
 
 	log.Println("Starting server...")
 
-	var err error
-	hostname, err = os.Hostname()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	release = os.Getenv("WORKFLOW_RELEASE")
-	if release == "" {
-		release = "unknown"
-	}
-
-	commit = os.Getenv("GIT_SHA")
-	if commit == "" {
-		commit = "Not present"
-	}
-
-	powered = os.Getenv("POWERED_BY")
-	if powered == "" {
-		powered = "Deis"
-	}
-
 	// point / at the handler function
-	http.HandleFunc("/", httpHandler)
+	http.HandleFunc("/", handler)
 
 	// serve static content from /static
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
-	log.Println("Server started. Listening on port " + httpListenAddr)
-	log.Fatal(http.ListenAndServe(":"+httpListenAddr, nil))
+	log.Println("Server started. Listening on port " + *httpListenAddr)
+	log.Fatal(http.ListenAndServe(":"+*httpListenAddr, nil))
+}
+
+const (
+	html = `
+		<html>
+			<head>
+				<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<title>Croc Hunter</title>
+				<link rel='stylesheet' href='/static/game.css'/>
+				<link rel="icon" type="image/png" href="/static/favicon-16x16.png" sizes="16x16" />
+				<link rel="icon" type="image/png" href="/static/favicon-32x32.png" sizes="32x32" />
+			</head>
+			<body>
+				<canvas id="canvasBg" width="800" height="490" ></canvas>
+				<canvas id="canvasEnemy" width="800" height="500" ></canvas>
+				<canvas id="canvasJet" width="800" height="500" ></canvas>
+				<canvas id="canvasHud" width="800" height="500" ></canvas>
+				<script src='/static/game2.js'></script>
+				<div class="details">
+				<strong>Hostname: </strong>%s<br>
+				<strong>Release: </strong>%s<br>
+				<strong>Commit: </strong>%s<br>
+				<strong>Powered By: </strong>%s<br>
+				</div>
+			</body>
+		</html>
+		`
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		log.Fatalf("could not get hostname: %s", err)
+	}
+
+	release := os.Getenv("WORKFLOW_RELEASE")
+	commit := os.Getenv("GIT_SHA")
+	powered := os.Getenv("POWERED_BY")
+
+	if release == "" {
+		release = "unknown"
+	}
+	if commit == "" {
+		commit = "not present"
+	}
+	if powered == "" {
+		powered = "deis"
+	}
+
+	fmt.Fprintf(w, html, hostname, release, commit, powered)
 }
