@@ -1,8 +1,8 @@
 #!/usr/bin/groovy
 
 // load pipeline functions
-@Library('github.com/lachie83/jenkins-pipeline@master')
-def pipeline = new io.estrado.Pipeline()
+// @Library('github.com/lachie83/jenkins-pipeline@master')
+// def pipeline = new io.estrado.Pipeline()
 
 node {
   def goPath = "/go"
