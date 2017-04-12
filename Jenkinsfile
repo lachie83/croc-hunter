@@ -6,6 +6,8 @@
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.3.0', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -42,8 +44,12 @@ volumes:[
     // debugging helm deployments
     if (env.DEBUG_DEPLOY) {
       println "Runing helm tests"
+      container('kubectl') {
       pipeline.kubectlTest()
-      pipeline.helmConfig()
+      }
+      container('helm') {
+        pipeline.helmConfig()
+      }
     }
 
     def acct = pipeline.getContainerRepoAcct(config)
@@ -76,20 +82,23 @@ volumes:[
       // run go tests
       sh "go test -v -race ./..."
 
-      // run helm chart linter
-      pipeline.helmLint(chart_dir)
+      container('helm') {
 
-      // run dry-run helm chart installation
-      pipeline.helmDeploy(
-        dry_run       : true,
-        name          : config.app.name,
-        version_tag   : image_tags_list.get(0),
-        chart_dir     : chart_dir,
-        replicas      : config.app.replicas,
-        cpu           : config.app.cpu,
-        memory        : config.app.memory
-      )
+        // run helm chart linter
+        pipeline.helmLint(chart_dir)
 
+        // run dry-run helm chart installation
+        pipeline.helmDeploy(
+          dry_run       : true,
+          name          : config.app.name,
+          version_tag   : image_tags_list.get(0),
+          chart_dir     : chart_dir,
+          replicas      : config.app.replicas,
+          cpu           : config.app.cpu,
+          memory        : config.app.memory
+        )
+
+      }
     }
 
     stage ('publish') {
@@ -119,17 +128,21 @@ volumes:[
     if (env.BRANCH_NAME == 'master') {
       stage ('deploy') {
 
-        // Deploy using Helm chart
-        pipeline.helmDeploy(
-          dry_run       : false,
-          name          : config.app.name,
-          version_tag   : image_tags_list.get(0),
-          chart_dir     : chart_dir,
-          replicas      : config.app.replicas,
-          cpu           : config.app.cpu,
-          memory        : config.app.memory
-        )
+          container('helm') {
 
+
+          // Deploy using Helm chart
+          pipeline.helmDeploy(
+            dry_run       : false,
+            name          : config.app.name,
+            version_tag   : image_tags_list.get(0),
+            chart_dir     : chart_dir,
+            replicas      : config.app.replicas,
+            cpu           : config.app.cpu,
+            memory        : config.app.memory
+          )
+
+        }
       }
     }
   }
