@@ -59,7 +59,7 @@ volumes:[
     // compile tag list
     def image_tags_list = pipeline.getMapValues(image_tags_map)
 
-    stage ('test and compile') {
+    stage ('compile and test') {
 
       container('golang') {
         sh "go test -v -race ./..."
