@@ -4,7 +4,7 @@
 // @Library('github.com/lachie83/jenkins-pipeline@master')
 
 podTemplate(label: 'mypod', containers: [
-    containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
+    containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.3.0', command: 'cat', ttyEnabled: true),
