@@ -3,7 +3,7 @@
 // load pipeline functions
 // @Library('github.com/lachie83/jenkins-pipeline@master')
 
-podTemplate(label: 'mypod', containers: [
+podTemplate(name: 'blah' label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
 ],
