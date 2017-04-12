@@ -9,7 +9,6 @@ podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.3.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
-]
 ]){
 
   def pipeline = new io.estrado.Pipeline()
