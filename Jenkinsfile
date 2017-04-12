@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 
 // load pipeline functions
-@Library('https://github.com/lachie83/jenkins-pipeline@master')
+@Library('github.com/lachie83/jenkins-pipeline@master')
 def pipeline = new io.estrado.Pipeline()
 
 podTemplate(label: 'mypod', containers: [
