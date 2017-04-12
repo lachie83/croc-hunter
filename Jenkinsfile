@@ -6,6 +6,7 @@
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'golang', image: 'golang:1.7.5-alpine', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.3.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
@@ -73,14 +74,18 @@ volumes:[
     stage ('compile') {
 
       sh "cd ${workDir}"
-      sh "make bootstrap build"
 
+      container('golang') {
+        sh "make bootstrap build"
+      }
     }
 
     stage ('test') {
 
       // run go tests
+      container('golang') {
       sh "go test -v -race ./..."
+      }
 
       container('helm') {
 
@@ -129,8 +134,7 @@ volumes:[
       stage ('deploy') {
 
           container('helm') {
-
-
+            
           // Deploy using Helm chart
           pipeline.helmDeploy(
             dry_run       : false,
