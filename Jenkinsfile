@@ -56,7 +56,7 @@ volumes:[
     stage ('preparation') {
 
       // Print env -- debugging
-      //sh "env | sort"
+      sh "env | sort"
 
       sh "mkdir -p ${workDir}"
       sh "cp -R ${pwd}/* ${workDir}"
