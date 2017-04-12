@@ -3,7 +3,7 @@
 // load pipeline functions
 // @Library('github.com/lachie83/jenkins-pipeline@master')
 
-podTemplate(name: 'default' label: 'mypod', containers: [
+podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
 ],
 volumes:[
@@ -12,7 +12,7 @@ volumes:[
 
   def pipeline = new io.estrado.Pipeline()
 
-  node ('default') {
+  node ('mypod') {
     def goPath = "/go"
     def workDir = "${goPath}/src/github.com/lachie83/croc-hunter/"
     def pwd = pwd()
