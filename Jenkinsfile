@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 
 // load pipeline functions
-// @Library('github.com/lachie83/jenkins-pipeline@master')
+@Library('github.com/lachie83/jenkins-pipeline@master') _
 
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
