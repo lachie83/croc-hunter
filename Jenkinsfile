@@ -61,30 +61,18 @@ volumes:[
     // compile tag list
     def image_tags_list = pipeline.getMapValues(image_tags_map)
 
-    stage ('preparation') {
-
-      // Print env -- debugging
-      //sh "env | sort"
-
-      // sh "sudo mkdir -p ${workDir}"
-      // sh "cp -R ${pwd}/* ${workDir}"
-
-    }
-
-    stage ('compile') {
-
-      // sh "cd ${workDir}"
+    stage ('test and compile') {
 
       container('golang') {
+        sh "go test -v -race ./..."
         sh "make bootstrap build"
       }
     }
 
-    stage ('test') {
+    stage ('test deployment') {
 
       // run go tests
       container('golang') {
-      sh "go test -v -race ./..."
       }
 
       container('helm') {
@@ -106,7 +94,7 @@ volumes:[
       }
     }
 
-    stage ('publish') {
+    stage ('publish container') {
 
       container('docker') {
 
@@ -131,7 +119,7 @@ volumes:[
 
     // deploy only the master branch
     if (env.BRANCH_NAME == 'master') {
-      stage ('deploy') {
+      stage ('deploy to k8s') {
 
           container('helm') {
 
