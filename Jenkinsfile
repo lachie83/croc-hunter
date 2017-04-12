@@ -5,6 +5,7 @@
 
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'quay.io/lachie83/jnlp-slave:v8.1', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -93,21 +94,24 @@ volumes:[
 
     stage ('publish') {
 
-      // perform docker login to quay as the docker-pipeline-plugin doesn't work with the next auth json format
-      withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: config.container_repo.jenkins_creds_id,
-                      usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-        sh "docker login -e ${config.container_repo.dockeremail} -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
-      }
+      container('docker') {
 
-      // build and publish container
-      pipeline.containerBuildPub(
-          dockerfile: config.container_repo.dockerfile,
-          host      : config.container_repo.host,
-          acct      : acct,
-          repo      : config.container_repo.repo,
-          tags      : image_tags_list,
-          auth_id   : config.container_repo.jenkins_creds_id
-      )
+        // perform docker login to quay as the docker-pipeline-plugin doesn't work with the next auth json format
+        withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: config.container_repo.jenkins_creds_id,
+                        usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+          sh "docker login -e ${config.container_repo.dockeremail} -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
+        }
+
+        // build and publish container
+        pipeline.containerBuildPub(
+            dockerfile: config.container_repo.dockerfile,
+            host      : config.container_repo.host,
+            acct      : acct,
+            repo      : config.container_repo.repo,
+            tags      : image_tags_list,
+            auth_id   : config.container_repo.jenkins_creds_id
+        )
+      }
 
     }
 
