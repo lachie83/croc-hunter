@@ -33,7 +33,7 @@ all: build
 
 .PHONY: build
 build:
-	GOBIN=$(BINDIR) $(GO) install $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/lachie83/croc-hunter/...
+	GOBIN=$(BINDIR) $(GO) build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)'
 
 HAS_GLIDE := $(shell command -v glide;)
 HAS_GIT := $(shell command -v git;)

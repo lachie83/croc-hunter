@@ -17,10 +17,9 @@ volumes:[
   def pipeline = new io.estrado.Pipeline()
 
   node ('mypod') {
-    
+
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/croc-hunter"
-
 
     checkout scm
 
