@@ -2,6 +2,7 @@
 
 // load pipeline functions
 @Library('github.com/lachie83/jenkins-pipeline@master')
+def pipeline = new io.estrado.Pipeline()
 
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
@@ -13,8 +14,6 @@ podTemplate(label: 'mypod', containers: [
 volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
-
-  def pipeline = new io.estrado.Pipeline()
 
   node ('mypod') {
 
