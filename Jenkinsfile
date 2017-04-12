@@ -73,7 +73,7 @@ volumes:[
 
     stage ('compile') {
 
-      sh "cd ${workDir}"
+      // sh "cd ${workDir}"
 
       container('golang') {
         sh "make bootstrap build"
