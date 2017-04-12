@@ -1,6 +1,7 @@
 #!/usr/bin/groovy
 
 // load pipeline functions
+// Requires github-organization-folder plugin to load from github
 @Library('github.com/lachie83/jenkins-pipeline@master')
 def pipeline = new io.estrado.Pipeline()
 
