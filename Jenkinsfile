@@ -66,8 +66,8 @@ volumes:[
       // Print env -- debugging
       //sh "env | sort"
 
-      sh "sudo mkdir -p ${workDir}"
-      sh "cp -R ${pwd}/* ${workDir}"
+      // sh "sudo mkdir -p ${workDir}"
+      // sh "cp -R ${pwd}/* ${workDir}"
 
     }
 
