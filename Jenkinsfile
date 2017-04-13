@@ -5,7 +5,7 @@
 @Library('github.com/lachie83/jenkins-pipeline@master')
 def pipeline = new io.estrado.Pipeline()
 
-podTemplate(label: 'mypod', containers: [
+podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'docker', image: 'docker:1.12.6',       command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
@@ -16,7 +16,7 @@ volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
 
-  node ('mypod') {
+  node ('jenkins-pipeline') {
 
     def pwd = pwd()
     def chart_dir = "${pwd}/charts/croc-hunter"
@@ -37,12 +37,12 @@ volumes:[
     // set additional git envvars for image tagging
     pipeline.gitEnvVars()
 
-    // used to debug deployment setup
-    env.DEBUG_DEPLOY = false
+    // If pipeline debugging enabled
+    if (config.pipeline.debug) {
+      println "DEBUG ENABLED"
+      sh "env | sort"
 
-    // debugging helm deployments
-    if (env.DEBUG_DEPLOY) {
-      println "Runing helm tests"
+      println "Runing kubectl/helm tests"
       container('kubectl') {
       pipeline.kubectlTest()
       }
@@ -114,9 +114,7 @@ volumes:[
     // deploy only the master branch
     if (env.BRANCH_NAME == 'master') {
       stage ('deploy to k8s') {
-
-          container('helm') {
-
+        container('helm') {
           // Deploy using Helm chart
           pipeline.helmDeploy(
             dry_run       : false,
@@ -127,7 +125,11 @@ volumes:[
             cpu           : config.app.cpu,
             memory        : config.app.memory
           )
-
+          
+          //  Run helm tests
+          if (config.app.test) {
+            pipeline.helmTest()
+          }
         }
       }
     }

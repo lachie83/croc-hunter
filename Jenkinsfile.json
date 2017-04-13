@@ -3,7 +3,8 @@
     "name": "croc-hunter",
     "replicas": "3",
     "cpu": "10m",
-    "memory": "128Mi"
+    "memory": "128Mi",
+    "test": true
   },
   "container_repo": {
     "host": "quay.io",
@@ -16,6 +17,7 @@
   },
   "pipeline": {
       "enabled": true,
+      "debug": false,
       "library": {
         "branch": "master"
       }
