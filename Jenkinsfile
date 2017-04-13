@@ -69,10 +69,6 @@ volumes:[
 
     stage ('test deployment') {
 
-      // run go tests
-      container('golang') {
-      }
-
       container('helm') {
 
         // run helm chart linter
