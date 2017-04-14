@@ -8,4 +8,4 @@
 Basic go webserver to demonstrate example CI/CD pipeline using Kubernetes 
 
 # Deploy using Jenkins Chart and Helm
-[![Demo Pipeline]((https://img.youtube.com/vi/NVoln4HdZOY/0.jpg](https://youtu.be/NVoln4HdZOY "Demo Pipeline")
+[![Demo Pipeline](https://img.youtube.com/vi/NVoln4HdZOY/0.jpg)](https://youtu.be/NVoln4HdZOY "Demo Pipeline")
