@@ -1,4 +1,4 @@
-{{- if .Values.Pdb.enabled }}
+{{- if .Values.pdb.enabled }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -8,10 +8,10 @@ metadata:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    component: "{{.Release.Name}}-{{.Values.Component}}"
+    component: "{{.Release.Name}}-{{.Values.component}}"
 spec:
   selector:
     matchLabels:
-      component: "{{.Release.Name}}-{{.Values.Component}}"
-  minAvailable: {{.Values.Pdb.minAvailable}}
+      component: "{{.Release.Name}}-{{.Values.component}}"
+  minAvailable: {{.Values.pdb.minAvailable}}
 {{- end }}
