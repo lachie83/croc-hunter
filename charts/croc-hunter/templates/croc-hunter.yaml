@@ -45,7 +45,8 @@ spec:
           image: "{{.Values.image}}:{{.Values.imageTag}}"
           imagePullPolicy: "{{.Values.imagePullPolicy}}"
           ports:
-            - containerPort: {{.Values.containerPort}}
+          - name: http
+            containerPort: {{.Values.containerPort}}
           resources:
             requests:
               cpu: "{{.Values.cpu}}"
