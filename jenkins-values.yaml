@@ -1,0 +1,32 @@
+# Includes complete Jenkins configuration in order to run croc-hunter pipeline
+
+Master:
+  Memory: "512Mi"
+  HostName: jenkins-blue.k8s.estrado.io
+  ServiceType: ClusterIP
+  InstallPlugins:
+      - kubernetes:0.11 
+      - workflow-aggregator:2.5
+      - credentials-binding:1.11
+      - git:3.2.0
+      - pipeline-github-lib:1.0
+      - blueocean:1.0.1
+
+  ScriptApproval:
+    - "method groovy.json.JsonSlurperClassic parseText java.lang.String"
+    - "new groovy.json.JsonSlurperClassic"
+    - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods leftShift java.util.Map java.util.Map"
+    - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods split java.lang.String"
+
+  Ingress:
+    Annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+
+    TLS:
+      - secretName: jenkins-blue.k8s.estrado.io
+        hosts:
+          - jenkins-blue.k8s.estrado.io
+
+Agent:
+  Enabled: false
