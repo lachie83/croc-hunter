@@ -53,3 +53,11 @@ spec:
           env:
           - name: WORKFLOW_RELEASE
             value: {{.Release.Name | quote }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
