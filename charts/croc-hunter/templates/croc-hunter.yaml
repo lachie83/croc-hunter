@@ -6,16 +6,14 @@ metadata:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    component: "{{.Release.Name}}-{{.Values.Component}}"
-  annotations:
-    "helm.sh/created": {{.Release.Time.Seconds | quote }}
+    component: "{{.Release.Name}}-{{.Values.component}}"
 spec:
   ports:
-    - port: {{.Values.ServicePort}}
-      targetPort: {{.Values.ContainerPort}}
+    - port: {{.Values.servicePort}}
+      targetPort: {{.Values.containerPort}}
   selector:
-    component: "{{.Release.Name}}-{{.Values.Component}}"
-  type: {{ default "ClusterIP" .Values.ServiceType | quote }}
+    component: "{{.Release.Name}}-{{.Values.component}}"
+  type: {{ default "ClusterIP" .Values.serviceType | quote }}
 
 ---
 apiVersion: extensions/v1beta1
@@ -26,34 +24,32 @@ metadata:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    component: "{{.Release.Name}}-{{.Values.Component}}"
-  annotations:
-    "helm.sh/created": {{.Release.Time.Seconds | quote }}
+    component: "{{.Release.Name}}-{{.Values.component}}"
 spec:
-  replicas: {{ default 1 .Values.Replicas }}
+  replicas: {{ default 1 .Values.replicas }}
   strategy:
     type: RollingUpdate
   selector:
     matchLabels:
-      component: "{{.Release.Name}}-{{.Values.Component}}"
+      component: "{{.Release.Name}}-{{.Values.component}}"
   template:
     metadata:
       labels:
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-        component: "{{.Release.Name}}-{{.Values.Component}}"
+        component: "{{.Release.Name}}-{{.Values.component}}"
     spec:
       containers:
         - name: {{ template "fullname" . }}
-          image: "{{.Values.Image}}:{{.Values.ImageTag}}"
-          imagePullPolicy: "{{.Values.ImagePullPolicy}}"
+          image: "{{.Values.image}}:{{.Values.imageTag}}"
+          imagePullPolicy: "{{.Values.imagePullPolicy}}"
           ports:
-            - containerPort: {{.Values.ContainerPort}}
+            - containerPort: {{.Values.containerPort}}
           resources:
             requests:
-              cpu: "{{.Values.Cpu}}"
-              memory: "{{.Values.Memory}}"
+              cpu: "{{.Values.cpu}}"
+              memory: "{{.Values.memory}}"
           env:
           - name: WORKFLOW_RELEASE
             value: {{.Release.Name | quote }}

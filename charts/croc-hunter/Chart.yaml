@@ -1,7 +1,7 @@
 name: croc-hunter
 home: https://github.com/lachie83/croc-hunter
-version: 0.2.1
-description: croc-hunter chart for Kubernetes.
+version: 0.3.0
+description: Live out your dream hunting Crocs
 sources:
   - https://github.com/lachie83/croc-hunter
 maintainers:
