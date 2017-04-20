@@ -19,7 +19,7 @@ Alternatively, clone the repo if you wish to use the development snapshot:
 $ git clone https://github.com/lachie83/croc-hunter/charts
 ```
 
-## Chart singing
+## Chart signing
 
 The chart is signed using Helm provenance and integrity.
    * https://github.com/kubernetes/helm/blob/master/docs/provenance.md
