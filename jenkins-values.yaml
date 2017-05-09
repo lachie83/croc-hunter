@@ -2,15 +2,15 @@
 
 Master:
   Memory: "512Mi"
-  HostName: jenkins-blue.k8s.estrado.io
+  HostName: jenkins.ing.az.estrado.io
   ServiceType: ClusterIP
   InstallPlugins:
       - kubernetes:0.11 
       - workflow-aggregator:2.5
       - credentials-binding:1.11
-      - git:3.2.0
+      - git:3.3.0
       - pipeline-github-lib:1.0
-      - ghprb:1.36.1
+      - ghprb:1.36.2
       - blueocean:1.0.1
 
   ScriptApproval:
@@ -25,9 +25,9 @@ Master:
       kubernetes.io/tls-acme: "true"
 
     TLS:
-      - secretName: jenkins-blue.k8s.estrado.io
+      - secretName: jenkins.ing.az.estrado.io
         hosts:
-          - jenkins-blue.k8s.estrado.io
+          - jenkins.ing.az.estrado.io
 
 Agent:
   Enabled: false

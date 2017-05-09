@@ -16,7 +16,7 @@ memory: "128Mi"
 # Ingress settings
 ingress:
   enabled: true
-  hostname: croc-hunter.k8s.estrado.io
+  hostname: croc-hunter.ing.az.estrado.io
   annotations:
      kubernetes.io/ingress.class: nginx
      kubernetes.io/tls-acme: "true"
