@@ -4,7 +4,7 @@
 
 Master:
   Memory: "512Mi"
-  HostName: jenkins.ing.az.estrado.io
+  HostName: jenkins.acs.az.estrado.io
   ServiceType: ClusterIP
   InstallPlugins:
       - kubernetes:0.11 
@@ -27,9 +27,9 @@ Master:
       kubernetes.io/tls-acme: "true"
 
     TLS:
-      - secretName: jenkins.ing.az.estrado.io
+      - secretName: jenkins.acs.az.estrado.io
         hosts:
-          - jenkins.ing.az.estrado.io
+          - jenkins.acs.az.estrado.io
 
 Agent:
   Enabled: false
