@@ -1,4 +1,6 @@
 # Includes complete Jenkins configuration in order to run croc-hunter pipeline
+# To install on your own cluster, run:
+# helm --namespace jenkins --name jenkins -f ./jenkins-values.yaml install stable/jenkins
 
 Master:
   Memory: "512Mi"
