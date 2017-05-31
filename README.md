@@ -10,3 +10,4 @@ Basic go webserver to demonstrate example CI/CD pipeline using Kubernetes
 
 # How to setup the Jenkins infrastructure 
 [![Jenkins Setup](https://img.youtube.com/vi/eMOzF_xAm7w/0.jpg)](https://youtu.be/eMOzF_xAm7w "Jenkins Setup")
+* See DEMO.md for steps
