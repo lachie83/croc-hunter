@@ -112,14 +112,14 @@ volumes:[
 
     }
 
-    if (env.BRANCH_NAME =~ 'PR' ) {
+    if (env.BRANCH_NAME =~ "PR-*" ) {
       stage ('deploy to k8s') {
         container('helm') {
           // Deploy using Helm chart
           pipeline.helmDeploy(
             dry_run       : false,
-            name          : env.BRANCH_NAME,
-            namespace     : env.BRANCH_NAME,
+            name          : env.BRANCH_NAME.toLowerCase(),
+            namespace     : env.BRANCH_NAME.toLowerCase(),
             version_tag   : image_tags_list.get(0),
             chart_dir     : chart_dir,
             replicas      : config.app.replicas,
@@ -130,13 +130,13 @@ volumes:[
           //  Run helm tests
           if (config.app.test) {
             pipeline.helmTest(
-              name        : env.BRANCH_NAME
+              name        : env.BRANCH_NAME.toLowerCase()
             )
           }
 
           // delete test deployment
           pipeline.helmDelete(
-              name       : env.BRANCH_NAME
+              name       : env.BRANCH_NAME.toLowerCase()
           )
         }
       }
