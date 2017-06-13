@@ -17,7 +17,7 @@
   },
   "pipeline": {
       "enabled": true,
-      "debug": false,
+      "debug": true,
       "library": {
         "branch": "master"
       }
