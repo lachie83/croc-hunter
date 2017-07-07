@@ -8,8 +8,8 @@ def pipeline = new io.estrado.Pipeline()
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'docker', image: 'docker:1.12.6',       command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.4.1', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.5.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
@@ -78,6 +78,7 @@ volumes:[
         pipeline.helmDeploy(
           dry_run       : true,
           name          : config.app.name,
+          namespace     : config.app.name,
           version_tag   : image_tags_list.get(0),
           chart_dir     : chart_dir,
           replicas      : config.app.replicas,
@@ -111,6 +112,36 @@ volumes:[
 
     }
 
+    if (env.BRANCH_NAME =~ "PR-*" ) {
+      stage ('deploy to k8s') {
+        container('helm') {
+          // Deploy using Helm chart
+          pipeline.helmDeploy(
+            dry_run       : false,
+            name          : env.BRANCH_NAME.toLowerCase(),
+            namespace     : env.BRANCH_NAME.toLowerCase(),
+            version_tag   : image_tags_list.get(0),
+            chart_dir     : chart_dir,
+            replicas      : config.app.replicas,
+            cpu           : config.app.cpu,
+            memory        : config.app.memory
+          )
+
+          //  Run helm tests
+          if (config.app.test) {
+            pipeline.helmTest(
+              name        : env.BRANCH_NAME.toLowerCase()
+            )
+          }
+
+          // delete test deployment
+          pipeline.helmDelete(
+              name       : env.BRANCH_NAME.toLowerCase()
+          )
+        }
+      }
+    }
+
     // deploy only the master branch
     if (env.BRANCH_NAME == 'master') {
       stage ('deploy to k8s') {
@@ -119,6 +150,7 @@ volumes:[
           pipeline.helmDeploy(
             dry_run       : false,
             name          : config.app.name,
+            namespace     : config.app.name,
             version_tag   : image_tags_list.get(0),
             chart_dir     : chart_dir,
             replicas      : config.app.replicas,

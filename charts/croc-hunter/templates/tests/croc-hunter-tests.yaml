@@ -8,5 +8,5 @@ spec:
   containers:
     - name: {{ template "fullname" . }}-web-test
       image: busybox
-      command: ["wget",  "--spider", "{{ template "fullname" . }}:{{.Values.ServicePort}}"]
+      command: ["wget",  "--spider", "{{ template "fullname" . }}:{{.Values.servicePort}}"]
   restartPolicy: Never
