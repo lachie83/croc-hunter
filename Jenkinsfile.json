@@ -4,7 +4,8 @@
     "replicas": "3",
     "cpu": "10m",
     "memory": "128Mi",
-    "test": true
+    "test": true,
+    "hostname": "croc-hunter.onesix.az.estrado.io"
   },
   "container_repo": {
     "host": "quay.io",
