@@ -44,7 +44,7 @@ volumes:[
 
       println "Runing kubectl/helm tests"
       container('kubectl') {
-      pipeline.kubectlTest()
+        pipeline.kubectlTest()
       }
       container('helm') {
         pipeline.helmConfig()
