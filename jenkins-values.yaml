@@ -3,6 +3,7 @@
 # helm --namespace jenkins --name jenkins -f ./jenkins-values.yaml install stable/jenkins
 
 Master:
+  ImageTag: "2.67"
   Memory: "512Mi"
   HostName: jenkins.acs.az.estrado.io
   ServiceType: ClusterIP
