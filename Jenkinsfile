@@ -81,7 +81,7 @@ volumes:[
           namespace     : config.app.name,
           chart_dir     : chart_dir,
           set           : [
-            "imageTag": image_tags_list.get(0)
+            "imageTag": image_tags_list.get(0),
             "replicas": config.app.replicas,
             "cpu": config.app.cpu,
             "memory": config.app.memory,
@@ -125,7 +125,7 @@ volumes:[
             namespace     : env.BRANCH_NAME.toLowerCase(),
             chart_dir     : chart_dir,
             set           : [
-              "imageTag": image_tags_list.get(0)
+              "imageTag": image_tags_list.get(0),
               "replicas": config.app.replicas,
               "cpu": config.app.cpu,
               "memory": config.app.memory,
@@ -159,7 +159,7 @@ volumes:[
             namespace     : config.app.name,
             chart_dir     : chart_dir,
             set           : [
-              "imageTag": image_tags_list.get(0)
+              "imageTag": image_tags_list.get(0),
               "replicas": config.app.replicas,
               "cpu": config.app.cpu,
               "memory": config.app.memory,
