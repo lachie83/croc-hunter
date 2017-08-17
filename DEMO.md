@@ -61,10 +61,11 @@ open ${JENKINS_URL}/login
 printf $(kubectl get secret --namespace jenkins jenkins-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode) | pbcopy
 ```
 
-## Add Credentials for private Container Registry
+## Add credentials for private container registry (optional)
 ```
 kubectl create secret docker-registry croc-hunter-secrets --docker-server=$DOCKER_SERVER --docker-username=$DOCKER_USERNAME --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL --namespace=croc-hunter
 ```
+Reference to the secret name must also be added to the chart values.yaml or set on install.
 
 ## Login and configure Jenkins and setup pipeline
 ```
