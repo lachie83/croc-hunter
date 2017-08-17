@@ -40,8 +40,10 @@ spec:
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
         component: "{{.Release.Name}}-{{.Values.component}}"
     spec:
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
       containers:
         - name: {{ template "fullname" . }}
           image: "{{.Values.image}}:{{.Values.imageTag}}"

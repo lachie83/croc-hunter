@@ -11,9 +11,11 @@ replicas: 3
 image: "quay.io/lachie83/croc-hunter"
 imageTag: "latest"
 imagePullPolicy: "Always"
+## If you have a private registry you specify a secret to use
+#imagePullSecrets:
 cpu: "10m"
 memory: "128Mi"
-# Ingress settings
+## Ingress settings
 ingress:
   enabled: true
   hostname: croc-hunter.acs.az.estrado.io
@@ -21,7 +23,7 @@ ingress:
      kubernetes.io/ingress.class: nginx
      kubernetes.io/tls-acme: "true"
   tls: true
-# PodDisruptionBudget
+## PodDisruptionBudget
 pdb:
   enabled: false
   minAvailable: 2
