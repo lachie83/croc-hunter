@@ -3,7 +3,7 @@
 # helm --namespace jenkins --name jenkins -f ./jenkins-values.yaml install stable/jenkins
 
 Master:
-  ImageTag: "2.67"
+  ImageTag: "2.74"
   Memory: "512Mi"
   HostName: jenkins.acs.az.estrado.io
   ServiceType: ClusterIP
@@ -14,7 +14,7 @@ Master:
       - git:3.5.1
       - pipeline-github-lib:1.0
       - ghprb:1.39.0
-      - blueocean:1.1.6
+      - blueocean:1.1.7
 
   ScriptApproval:
     - "method groovy.json.JsonSlurperClassic parseText java.lang.String"

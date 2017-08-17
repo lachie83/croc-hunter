@@ -2,14 +2,14 @@
 
 // load pipeline functions
 // Requires pipeline-github-lib plugin to load library from github
-@Library('github.com/lachie83/jenkins-pipeline@master')
+@Library('github.com/lachie83/jenkins-pipeline@dev')
 def pipeline = new io.estrado.Pipeline()
 
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'docker', image: 'docker:1.12.6',       command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.5.0', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.6.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
@@ -79,12 +79,14 @@ volumes:[
           dry_run       : true,
           name          : config.app.name,
           namespace     : config.app.name,
-          version_tag   : image_tags_list.get(0),
           chart_dir     : chart_dir,
-          replicas      : config.app.replicas,
-          cpu           : config.app.cpu,
-          memory        : config.app.memory,
-          hostname      : config.app.hostname
+          set           : [
+            "imageTag": image_tags_list.get(0)
+            "replicas": config.app.replicas,
+            "cpu": config.app.cpu,
+            "memory": config.app.memory,
+            "ingress.hostname": config.app.hostname,
+          ]
         )
 
       }
@@ -94,10 +96,10 @@ volumes:[
 
       container('docker') {
 
-        // perform docker login to quay as the docker-pipeline-plugin doesn't work with the next auth json format
+        // perform docker login to container registry as the docker-pipeline-plugin doesn't work with the next auth json format
         withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: config.container_repo.jenkins_creds_id,
                         usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-          sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} quay.io"
+          sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${config.container_repo.host}"
         }
 
         // build and publish container
@@ -121,12 +123,14 @@ volumes:[
             dry_run       : false,
             name          : env.BRANCH_NAME.toLowerCase(),
             namespace     : env.BRANCH_NAME.toLowerCase(),
-            version_tag   : image_tags_list.get(0),
             chart_dir     : chart_dir,
-            replicas      : config.app.replicas,
-            cpu           : config.app.cpu,
-            memory        : config.app.memory,
-            hostname      : config.app.hostname
+            set           : [
+              "imageTag": image_tags_list.get(0)
+              "replicas": config.app.replicas,
+              "cpu": config.app.cpu,
+              "memory": config.app.memory,
+              "ingress.hostname": config.app.hostname,
+            ]
           )
 
           //  Run helm tests
@@ -153,12 +157,14 @@ volumes:[
             dry_run       : false,
             name          : config.app.name,
             namespace     : config.app.name,
-            version_tag   : image_tags_list.get(0),
             chart_dir     : chart_dir,
-            replicas      : config.app.replicas,
-            cpu           : config.app.cpu,
-            memory        : config.app.memory,
-            hostname      : config.app.hostname
+            set           : [
+              "imageTag": image_tags_list.get(0)
+              "replicas": config.app.replicas,
+              "cpu": config.app.cpu,
+              "memory": config.app.memory,
+              "ingress.hostname": config.app.hostname,
+            ]
           )
           
           //  Run helm tests
