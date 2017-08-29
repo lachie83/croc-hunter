@@ -101,6 +101,12 @@ volumes:[
                         usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${config.container_repo.host}"
         }
+        
+        println "Add container image tags to anchore scanning list"
+        for (int i = 0; i < image_tags_list.size(); i++) {
+          def tag = image_tags_list.get(i)
+          sh "echo ${config.container_repo.host}/${acct}/${config.container_repo.repo}:${tag} ${WORKSPACE}/Dockerfile > anchore_images"
+        }
 
         // build and publish container
         pipeline.containerBuildPub(
