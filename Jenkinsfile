@@ -104,7 +104,7 @@ volumes:[
 
         // anchore image scanning configuration
         println "Add container image tags to anchore scanning list"
-        def imageLine = '6cba161501c8' + ' ' + env.WORKSPACE + '/DockerFile'
+        def imageLine = '6cba161501c8' + ' ' + env.WORKSPACE + '/Dockerfile'
         writeFile file: 'anchore_images', text: imageLine
         anchore name: 'anchore_images', inputQueries: [[query: 'list-packages all'], [query: 'list-files all'], [query: 'cve-scan all'], [query: 'show-pkg-diffs base']]
 
