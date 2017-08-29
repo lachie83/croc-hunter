@@ -14,7 +14,8 @@
     "jenkins_creds_id": "quay_creds",
     "repo": "croc-hunter",
     "dockeremail": ".",
-    "dockerfile": "./"
+    "dockerfile": "./",
+    "image_scanning": true
   },
   "pipeline": {
       "enabled": true,

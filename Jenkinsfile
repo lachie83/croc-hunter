@@ -109,7 +109,8 @@ volumes:[
             acct      : acct,
             repo      : config.container_repo.repo,
             tags      : image_tags_list,
-            auth_id   : config.container_repo.jenkins_creds_id
+            auth_id   : config.container_repo.jenkins_creds_id,
+            image_scanning: config.container_repo.image_scanning
         )
 
         // anchore image scanning configuration
