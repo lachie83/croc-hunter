@@ -102,12 +102,6 @@ volumes:[
           sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${config.container_repo.host}"
         }
 
-        // anchore image scanning configuration
-        println "Add container image tags to anchore scanning list"
-        def imageLine = '6cba161501c8' + ' ' + env.WORKSPACE + '/Dockerfile'
-        writeFile file: 'anchore_images', text: imageLine
-        anchore name: 'anchore_images', inputQueries: [[query: 'list-packages all'], [query: 'list-files all'], [query: 'cve-scan all'], [query: 'show-pkg-diffs base']]
-
         // build and publish container
         pipeline.containerBuildPub(
             dockerfile: config.container_repo.dockerfile,
@@ -117,6 +111,15 @@ volumes:[
             tags      : image_tags_list,
             auth_id   : config.container_repo.jenkins_creds_id
         )
+
+        // anchore image scanning configuration
+        println "Add container image tags to anchore scanning list"
+        
+        def tag = image_tags_list.get(0)
+        def imageLine = '${config.container_repo.host}/${acct}/${config.container_repo.repo}:${args.tag}' + ' ' + env.WORKSPACE + '/Dockerfile'
+        writeFile file: 'anchore_images', text: imageLine
+        anchore name: 'anchore_images', inputQueries: [[query: 'list-packages all'], [query: 'list-files all'], [query: 'cve-scan all'], [query: 'show-pkg-diffs base']]
+
       }
 
     }
