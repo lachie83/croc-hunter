@@ -23,6 +23,11 @@ volumes:[
 
     checkout scm
 
+    // anchore image scanning configuration
+    def imageLine = '6cba161501c8' + ' ' + env.WORKSPACE + '/DockerFile'
+    writeFile file: 'anchore_images', text: imageLine
+    anchore name: 'anchore_images', inputQueries: [[query: 'list-packages all'], [query: 'list-files all'], [query: 'cve-scan all'], [query: 'show-pkg-diffs base']]
+
     // read in required jenkins workflow config values
     def inputFile = readFile('Jenkinsfile.json')
     def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
@@ -101,7 +106,7 @@ volumes:[
                         usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${config.container_repo.host}"
         }
-        
+       
         println "Add container image tags to anchore scanning list"
         for (int i = 0; i < image_tags_list.size(); i++) {
           def tag = image_tags_list.get(i)
