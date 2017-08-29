@@ -1,4 +1,4 @@
-FROM golang:1.7-alpine
+FROM golang:1.8-alpine3.6
 
 MAINTAINER Lachlan Evenson <lachlan.evenson@gmail.com>
 
