@@ -6,7 +6,7 @@
 def pipeline = new io.estrado.Pipeline()
 
 podTemplate(label: 'jenkins-pipeline', containers: [
-    containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
+    containerTemplate(name: 'jnlp', image: 'lachlanevenson/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'docker', image: 'docker:1.12.6',       command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'golang', image: 'golang:1.8.3', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.6.0', command: 'cat', ttyEnabled: true),
@@ -103,14 +103,10 @@ volumes:[
         }
 
         // anchore image scanning configuration
+        println "Add container image tags to anchore scanning list"
         def imageLine = '6cba161501c8' + ' ' + env.WORKSPACE + '/DockerFile'
         writeFile file: 'anchore_images', text: imageLine
         anchore name: 'anchore_images', inputQueries: [[query: 'list-packages all'], [query: 'list-files all'], [query: 'cve-scan all'], [query: 'show-pkg-diffs base']]
-        println "Add container image tags to anchore scanning list"
-        for (int i = 0; i < image_tags_list.size(); i++) {
-          def tag = image_tags_list.get(i)
-          sh "echo ${config.container_repo.host}/${acct}/${config.container_repo.repo}:${tag} ${WORKSPACE}/Dockerfile > anchore_images"
-        }
 
         // build and publish container
         pipeline.containerBuildPub(
