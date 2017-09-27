@@ -15,7 +15,7 @@
     "repo": "croc-hunter",
     "dockeremail": ".",
     "dockerfile": "./",
-    "image_scanning": true
+    "image_scanning": false
   },
   "pipeline": {
       "enabled": true,
