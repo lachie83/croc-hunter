@@ -5,7 +5,7 @@
     "cpu": "10m",
     "memory": "128Mi",
     "test": true,
-    "hostname": "croc-hunter.onesix.az.estrado.io"
+    "hostname": "croc-hunter.acs.az.estrado.io"
   },
   "container_repo": {
     "host": "quay.io",
@@ -14,13 +14,14 @@
     "jenkins_creds_id": "quay_creds",
     "repo": "croc-hunter",
     "dockeremail": ".",
-    "dockerfile": "./"
+    "dockerfile": "./",
+    "image_scanning": true
   },
   "pipeline": {
       "enabled": true,
       "debug": false,
       "library": {
-        "branch": "master"
+        "branch": "dev"
       }
   }
 }
