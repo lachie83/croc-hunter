@@ -1,0 +1,17 @@
+---
+  apiVersion: helm.integrations.flux.weave.works/v1alpha
+  kind: FluxHelmRelease
+  metadata:
+    name: croc-hunter
+    namespace: default
+    labels:
+      chart: croc-hunter
+  spec:
+    chartGitPath: croc-hunter
+    values:
+      - name: image
+        value: quay.io/lachie83/croc-hunter
+      - name: imageTag
+        value: latest
+      - name: ingress.enabled
+        value: false
