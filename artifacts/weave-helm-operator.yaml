@@ -1,0 +1,45 @@
+---
+  apiVersion: apps/v1beta1
+  kind: Deployment
+  metadata:
+    name: weave-flux-helm-operator
+    labels:
+      name: weave-flux-helm-operator
+      app: weave-flux
+      weave-cloud-component: flux
+      weave-flux-component: helm-operator
+    namespace: weave
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: weave-flux-helm-operator
+          app: weave-flux
+          weave-cloud-component: flux
+          weave-flux-component: helm-operator
+      spec:
+        serviceAccount: weave-flux
+        containers:
+          - name: flux-helm-operator
+            args:
+              - '--git-url=git@github.com:weaveworks/flux-helm-test.git'
+              - '--git-branch=master'
+              - '--git-charts-path=charts'
+            env:
+              - name: WEAVE_CLOUD_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: weave-cloud
+                    key: token
+            image: 'quay.io/weaveworks/helm-operator:alpha'
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - name: git-key
+                mountPath: /etc/fluxd/ssh
+        volumes:
+          - name: git-key
+            secret:
+              secretName: flux-git-deploy 

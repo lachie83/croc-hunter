@@ -1,0 +1,18 @@
+---
+  apiVersion: helm.integrations.flux.weave.works/v1alpha
+  kind: FluxHelmRelease
+  metadata:
+    name: mongodb
+    namespace: default
+    labels:
+      chart: mongodb
+  spec:
+    chartGitPath: mongodb
+    releaseName: mongodb-database
+    values:
+      - name: image
+        value: bitnami/mongodb:3.7.1-r1
+      - name: imagePullPolicy
+        value: IfNotPresent
+      - name: persistence.enabled
+        value: false
