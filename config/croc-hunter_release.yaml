@@ -14,4 +14,4 @@
       - name: imageTag
         value: latest
       - name: ingress.enabled
-        value: false
+        value: "false"
