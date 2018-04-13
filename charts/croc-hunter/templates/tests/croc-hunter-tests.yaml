@@ -1,12 +1,37 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ template "fullname" . }}-web-test"
+  name: "{{ .Release.Name }}-web-test-{{ randAlphaNum 5 | lower }}"
   annotations:
     "helm.sh/hook": test-success
 spec:
+  initContainers:
+    - name: "test-framework"
+      image: "dduportal/bats:0.4.0"
+      command:
+      - "bash"
+      - "-c"
+      - |
+        set -ex
+        # copy bats to tools dir
+        cp -R /usr/local/libexec/ /tools/bats/
+      volumeMounts:
+      - mountPath: /tools
+        name: tools
   containers:
-    - name: {{ template "fullname" . }}-web-test
-      image: busybox
-      command: ["wget",  "--spider", "{{ template "fullname" . }}:{{.Values.servicePort}}"]
+    - name: {{ .Release.Name }}-ui-test
+      image: tutum/curl:trusty
+      command: ["/tools/bats/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+      - mountPath: /tests
+        name: tests
+        readOnly: true
+      - mountPath: /tools
+        name: tools
+  volumes:
+  - name: tests
+    configMap:
+      name: {{ template "fullname" . }}-tests
+  - name: tools
+    emptyDir: {}
   restartPolicy: Never
